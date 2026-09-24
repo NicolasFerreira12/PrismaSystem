@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Funcionário - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('funcionarios')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Cadastrar funcionário</h1></div>
+        <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+            <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+        </div>
+        <div class="card">
+            <form th:action="@{/funcionarios}" th:object="${funcionario}" method="post">
+                <div class="form-field">
+                    <label>RE</label>
+                    <input type="text" th:field="*{re}"/>
+                </div>
+                <div class="form-field">
+                    <label>Nome</label>
+                    <input type="text" th:field="*{nome}"/>
+                </div>
+                <div class="form-field">
+                    <label>Data de admissão</label>
+                    <input type="date" th:field="*{dataAdmissao}"/>
+                </div>
+                <div class="form-field">
+                    <label>Salário</label>
+                    <input type="text" th:field="*{salario}"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+        <p style="margin-top:16px;"><a href="/funcionarios">← Voltar</a></p>
+    </main>
+</div>
+</body>
+</html>

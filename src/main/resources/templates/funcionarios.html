@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Funcionários - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('funcionarios')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Funcionários</h1></div>
+        <div class="card" style="display:flex; gap:12px;">
+            <a class="btn btn-accent" href="/funcionarios/new">+ Cadastrar</a>
+            <a class="btn btn-outline" href="/funcionarios/list">Lista</a>
+            <a class="btn btn-outline" href="/funcionarios/busca">Buscar / Alterar</a>
+            <a class="btn btn-outline" href="/funcionarios/excluir">Excluir</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Funcionários - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('funcionarios')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Funcionários cadastrados</h1></div>
+        <table class="data-table">
+            <tr>
+                <th>RE</th>
+                <th>Nome</th>
+                <th>Data de admissão</th>
+                <th>Salário</th>
+            </tr>
+            <tr th:each="funcionario: ${funcionarios}">
+                <td class="mono" th:text="${funcionario.re}">RE</td>
+                <td th:text="${funcionario.nome}">Nome</td>
+                <td th:text="${#dates.format(funcionario.dataAdmissao,'dd/MM/yyyy')}">Data</td>
+                <td th:text="${#numbers.formatCurrency(funcionario.salario)}">Salário</td>
+            </tr>
+        </table>
+        <p style="margin-top:16px;"><a href="/funcionarios">← Voltar</a></p>
+    </main>
+</div>
+</body>
+</html>

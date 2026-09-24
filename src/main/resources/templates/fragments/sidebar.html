@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar(active)">
+  <div class="brand">Prisma<span>Sys</span></div>
+  <nav>
+    <a href="/funcionarios" th:classappend="${active == 'funcionarios'} ? 'active'">Funcionários</a>
+    <a href="/estoque" th:classappend="${active == 'estoque'} ? 'active'">Estoque</a>
+    <a href="/producao" th:classappend="${active == 'producao'} ? 'active'">Produção</a>
+    <a href="/distribuicao" th:classappend="${active == 'distribuicao'} ? 'active'">Distribuição</a>
+  </nav>
+</aside>
+</body>
+</html>

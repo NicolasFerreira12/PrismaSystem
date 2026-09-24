@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Entrar - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body style="background:var(--navy); display:flex; align-items:center; justify-content:center; min-height:100vh;">
+<div class="card" style="width:340px;">
+  <h1 style="text-align:center;">Prisma<span style="color:var(--accent);">Sys</span></h1>
+
+  <div th:if="${param.error}" style="background:#FBEDE8; border:1px solid var(--danger); color:var(--danger); padding:10px; border-radius:4px; margin-bottom:16px; font-size:14px;">
+    Login ou senha inválidos.
+  </div>
+  <div th:if="${param.logout}" style="background:#EAF3EC; border:1px solid #2f7a48; color:#2f7a48; padding:10px; border-radius:4px; margin-bottom:16px; font-size:14px;">
+    Sessão encerrada.
+  </div>
+
+  <form th:action="@{/login}" method="post">
+    <div class="form-field">
+      <label>Login</label>
+      <input type="text" name="username" autofocus="autofocus"/>
+    </div>
+    <div class="form-field">
+      <label>Senha</label>
+      <input type="password" name="password"/>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;">Entrar</button>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+/* ===== PrismaSys - Design System ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+    --bg: #F3F5F7;
+    --surface: #FFFFFF;
+    --navy: #14283F;
+    --navy-light: #1F3C5C;
+    --text-on-navy: #E7ECF1;
+    --text-on-navy-muted: #93A5B8;
+    --text: #1B2530;
+    --text-muted: #5C6B78;
+    --accent: #D98F2B;
+    --accent-dark: #B8761E;
+    --border: #DBE1E6;
+    --danger: #B3432B;
+
+    --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: var(--text);
+}
+
+a { color: var(--navy-light); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== Layout: sidebar + topbar ===== */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: var(--navy);
+    color: var(--text-on-navy);
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .brand {
+    font-weight: 700;
+    font-size: 18px;
+    padding: 0 24px 24px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+}
+
+.sidebar .brand span { color: var(--accent); }
+
+.sidebar nav a {
+    display: block;
+    padding: 10px 24px;
+    color: var(--text-on-navy-muted);
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    color: var(--text-on-navy);
+    background: rgba(255,255,255,0.06);
+    border-left-color: var(--accent);
+    text-decoration: none;
+}
+
+.main {
+    flex: 1;
+    padding: 32px 40px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h1 { font-size: 22px; }
+
+/* ===== Botões ===== */
+
+.btn {
+    display: inline-block;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.btn-primary { background: var(--navy); color: var(--text-on-navy); }
+.btn-primary:hover { background: var(--navy-light); text-decoration: none; }
+
+.btn-accent { background: var(--accent); color: #2A1A05; }
+.btn-accent:hover { background: var(--accent-dark); text-decoration: none; }
+
+.btn-outline { background: transparent; color: var(--navy); border-color: var(--border); }
+.btn-outline:hover { border-color: var(--navy); text-decoration: none; }
+
+/* ===== Cards / superfícies ===== */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+}
+
+/* ===== Tabelas ===== */
+
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+table.data-table th {
+    background: var(--navy);
+    color: var(--text-on-navy);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 16px;
+}
+
+table.data-table td {
+    padding: 11px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+}
+
+table.data-table td.mono { font-family: var(--font-mono); }
+
+table.data-table tr:nth-child(even) td { background: #FAFBFC; }
+table.data-table tr:hover td { background: #EFF3F6; }
+
+/* ===== Formulários ===== */
+
+.form-field {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 420px;
+}
+
+.form-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.form-field input {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    background: var(--surface);
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 3px rgba(31,60,92,0.15);
+}
+
+.form-field input[name="re"],
+.form-field input[name="ra"] { font-family: var(--font-mono); }
