@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <aside class="sidebar" th:fragment="sidebar(active)">
   <div class="brand">Prisma<span>Sys</span></div>
   <nav>
-    <a href="/funcionarios" th:classappend="${active == 'funcionarios'} ? 'active'">Funcionários</a>
-    <a href="/estoque" th:classappend="${active == 'estoque'} ? 'active'">Estoque</a>
-    <a href="/producao" th:classappend="${active == 'producao'} ? 'active'">Produção</a>
-    <a href="/distribuicao" th:classappend="${active == 'distribuicao'} ? 'active'">Distribuição</a>
+    <a href="/" th:classappend="${active == 'home'} ? 'active'">Início</a>
+    <a href="/funcionarios" sec:authorize="hasRole('ADMINISTRADOR')" th:classappend="${active == 'funcionarios'} ? 'active'">Funcionários</a>
+    <a href="/estoque" sec:authorize="hasRole('ESTOQUISTA')" th:classappend="${active == 'estoque'} ? 'active'">Estoque</a>
+    <a href="/producao" sec:authorize="hasRole('PRODUCAO')" th:classappend="${active == 'producao'} ? 'active'">Produção</a>
+    <a href="/clientes" sec:authorize="hasRole('VENDEDOR')" th:classappend="${active == 'clientes'} ? 'active'">Clientes</a>
+    <a href="/financeiro" sec:authorize="hasRole('FINANCEIRO')" th:classappend="${active == 'financeiro'} ? 'active'">Financeiro</a>
   </nav>
+  <div style="margin-top:auto; padding:16px 24px; border-top:1px solid rgba(255,255,255,0.12);">
+    <div style="font-size:13px; color:var(--text-on-navy-muted); margin-bottom:8px;" sec:authentication="name">usuário</div>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="btn btn-outline" style="width:100%; color:var(--text-on-navy); border-color:rgba(255,255,255,0.25);">Sair</button>
+    </form>
+  </div>
 </aside>
 </body>
 </html>

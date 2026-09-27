@@ -9,7 +9,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.authority.mapping.RoleHierarchyAuthoritiesMapper;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyAuthoritiesMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,8 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(autenticacaoService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(autenticacaoService);
         provider.setPasswordEncoder(passwordEncoder());
         provider.setAuthoritiesMapper(new RoleHierarchyAuthoritiesMapper(roleHierarchy()));
         return provider;
@@ -55,13 +54,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login", "/login?error", "/login?logout", "/css/**", "/js/**").permitAll()
                         // Cadastrar Funcionários / Controlar Acesso -> uso exclusivo do Administrador
                         .requestMatchers("/funcionarios/**").hasRole("ADMINISTRADOR")
                         // módulos futuros, já mapeados por perfil conforme o UC
                         .requestMatchers("/estoque/**").hasRole("ESTOQUISTA")
                         .requestMatchers("/producao/**").hasRole("PRODUCAO")
-                        .requestMatchers("/pedidos/**", "/vendas/**").hasRole("VENDEDOR")
+                        .requestMatchers("/pedidos/**", "/vendas/**", "/clientes/**").hasRole("VENDEDOR")
                         .requestMatchers("/financeiro/**", "/relatorios/**").hasRole("FINANCEIRO")
                         .anyRequest().authenticated()
                 )

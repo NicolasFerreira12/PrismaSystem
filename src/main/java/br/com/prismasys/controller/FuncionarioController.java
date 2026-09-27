@@ -33,6 +33,10 @@ public class FuncionarioController {
 			model.addAttribute("erro", "Já existe um funcionário cadastrado com o RE " + funcionario.getRe() + ".");
 			return "create-funcionario";
 		}
+		if (service.buscarPorLogin(funcionario.getLogin()).isPresent()) {
+			model.addAttribute("erro", "O login \"" + funcionario.getLogin() + "\" já está em uso.");
+			return "create-funcionario";
+		}
 		service.salvar(funcionario);
 		return "redirect:/funcionarios";
 	}

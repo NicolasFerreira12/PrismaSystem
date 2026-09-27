@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Cliente - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('clientes')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Cadastrar cliente</h1></div>
+    <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+      <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+    </div>
+    <div class="card">
+      <form th:action="@{/clientes}" th:object="${cliente}" method="post">
+        <div class="form-field">
+          <label>Nome</label>
+          <input type="text" th:field="*{nome}"/>
+        </div>
+        <div class="form-field">
+          <label>CPF/CNPJ</label>
+          <input type="text" th:field="*{cpfCnpj}"/>
+        </div>
+        <div class="form-field">
+          <label>Telefone</label>
+          <input type="text" th:field="*{telefone}"/>
+        </div>
+        <div class="form-field">
+          <label>E-mail</label>
+          <input type="text" th:field="*{email}"/>
+        </div>
+        <div class="form-field">
+          <label>Endereço</label>
+          <input type="text" th:field="*{endereco}"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+    <p style="margin-top:16px;"><a href="/clientes">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
