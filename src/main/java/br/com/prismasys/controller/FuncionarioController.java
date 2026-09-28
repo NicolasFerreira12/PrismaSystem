@@ -56,7 +56,9 @@ public class FuncionarioController {
 	public String buscar(@RequestParam("re") int re, Model model) {
 		Optional<Funcionario> funcionario = service.buscarPorRe(re);
 		if (funcionario.isPresent()) {
-			model.addAttribute("funcionario", funcionario.get());
+			Funcionario encontrado = funcionario.get();
+			encontrado.setSenha(""); // nunca expõe o hash no formulário
+			model.addAttribute("funcionario", encontrado);
 			return "alterar-funcionarios";
 		}
 		return "redirect:/funcionarios/busca";

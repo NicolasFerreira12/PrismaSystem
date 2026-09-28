@@ -28,6 +28,20 @@
                     <label>Salário</label>
                     <input type="text" th:field="*{salario}"/>
                 </div>
+                <div class="form-field">
+                    <label>Login</label>
+                    <input type="text" th:field="*{login}"/>
+                </div>
+                <div class="form-field">
+                    <label>Senha</label>
+                    <input type="password" th:field="*{senha}" placeholder="deixe em branco para não alterar"/>
+                </div>
+                <div class="form-field">
+                    <label>Perfil</label>
+                    <select th:field="*{perfil}" style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+                        <option th:each="p : ${T(br.com.prismasys.model.Perfil).values()}" th:value="${p}" th:text="${p}"></option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Salvar alterações</button>
             </form>
         </div>
