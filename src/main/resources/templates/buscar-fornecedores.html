@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Buscar Fornecedor - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('fornecedores')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Buscar / alterar fornecedor</h1></div>
+    <div class="card">
+      <form action="/fornecedores/search" method="get">
+        <div class="form-field"><label>CNPJ</label><input type="text" name="cnpj"/></div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+    <p style="margin-top:16px;"><a href="/fornecedores">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

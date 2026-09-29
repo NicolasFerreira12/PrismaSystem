@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Fornecedores - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('fornecedores')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Fornecedores cadastrados</h1></div>
+    <table class="data-table">
+      <tr>
+        <th>ID</th><th>Nome</th><th>CNPJ</th><th>Telefone</th><th>E-mail</th>
+      </tr>
+      <tr th:each="fornecedor: ${fornecedores}">
+        <td class="mono" th:text="${fornecedor.id}">ID</td>
+        <td th:text="${fornecedor.nome}">Nome</td>
+        <td class="mono" th:text="${fornecedor.cnpj}">CNPJ</td>
+        <td th:text="${fornecedor.telefone}">Telefone</td>
+        <td th:text="${fornecedor.email}">E-mail</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/fornecedores">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
