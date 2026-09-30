@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Transportadoras - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('transportadoras')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Transportadoras cadastradas</h1></div>
+    <table class="data-table">
+      <tr><th>ID</th><th>Nome</th><th>CNPJ</th><th>Telefone</th><th>E-mail</th></tr>
+      <tr th:each="transportadora: ${transportadoras}">
+        <td class="mono" th:text="${transportadora.id}">ID</td>
+        <td th:text="${transportadora.nome}">Nome</td>
+        <td class="mono" th:text="${transportadora.cnpj}">CNPJ</td>
+        <td th:text="${transportadora.telefone}">Telefone</td>
+        <td th:text="${transportadora.email}">E-mail</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/transportadoras">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
