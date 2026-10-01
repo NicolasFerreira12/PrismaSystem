@@ -11,6 +11,7 @@
     <a href="/clientes" sec:authorize="hasRole('VENDEDOR')" th:classappend="${active == 'clientes'} ? 'active'">Clientes</a>
     <a href="/fornecedores" sec:authorize="hasRole('VENDEDOR')" th:classappend="${active == 'fornecedores'} ? 'active'">Fornecedores</a>
     <a href="/transportadoras" sec:authorize="hasRole('VENDEDOR')" th:classappend="${active == 'transportadoras'} ? 'active'">Transportadoras</a>
+    <a href="/materias-primas" sec:authorize="hasRole('VENDEDOR')" th:classappend="${active == 'materias-primas'} ? 'active'">Matérias-primas</a>
     <a href="/financeiro" sec:authorize="hasRole('FINANCEIRO')" th:classappend="${active == 'financeiro'} ? 'active'">Financeiro</a>
   </nav>
   <div style="margin-top:auto; padding:16px 24px; border-top:1px solid rgba(255,255,255,0.12);">

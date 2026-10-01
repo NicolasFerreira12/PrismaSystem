@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Matérias-primas - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('materias-primas')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Matérias-primas cadastradas</h1></div>
+    <table class="data-table">
+      <tr><th>ID</th><th>Nome</th><th>Unidade</th><th>Preço unitário</th></tr>
+      <tr th:each="materiaPrima: ${materiasPrimas}">
+        <td class="mono" th:text="${materiaPrima.id}">ID</td>
+        <td th:text="${materiaPrima.nome}">Nome</td>
+        <td th:text="${materiaPrima.unidadeMedida}">Unidade</td>
+        <td th:text="${#numbers.formatCurrency(materiaPrima.precoUnitario)}">Preço</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/materias-primas">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

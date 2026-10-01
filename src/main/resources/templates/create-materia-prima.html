@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Matéria-prima - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('materias-primas')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Cadastrar matéria-prima</h1></div>
+    <div class="card">
+      <form th:action="@{/materias-primas}" th:object="${materiaPrima}" method="post">
+        <div class="form-field"><label>Nome</label><input type="text" th:field="*{nome}"/></div>
+        <div class="form-field"><label>Unidade de medida</label><input type="text" th:field="*{unidadeMedida}" placeholder="kg, L, un..."/></div>
+        <div class="form-field"><label>Preço unitário</label><input type="text" th:field="*{precoUnitario}"/></div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+    <p style="margin-top:16px;"><a href="/materias-primas">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
