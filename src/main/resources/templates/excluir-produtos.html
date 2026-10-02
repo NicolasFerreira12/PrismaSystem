@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Excluir Produto - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('produtos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Excluir produto</h1></div>
+    <div class="card">
+      <form action="/produtos/delete" method="get">
+        <div class="form-field"><label>ID</label><input type="text" name="id"/></div>
+        <button type="submit" class="btn btn-primary" style="background:var(--danger);">Excluir</button>
+      </form>
+    </div>
+    <p style="margin-top:16px; font-size:13px; color:var(--text-muted);">O ID aparece na tela de Lista.</p>
+    <p style="margin-top:8px;"><a href="/produtos">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

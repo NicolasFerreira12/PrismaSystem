@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Produtos - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('produtos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Produtos</h1></div>
+    <div class="card" style="display:flex; gap:12px;">
+      <a class="btn btn-accent" href="/produtos/new">+ Cadastrar</a>
+      <a class="btn btn-outline" href="/produtos/list">Lista</a>
+      <a class="btn btn-outline" href="/produtos/busca">Buscar / Alterar</a>
+      <a class="btn btn-outline" href="/produtos/excluir">Excluir</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Produtos - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('produtos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Produtos cadastrados</h1></div>
+    <table class="data-table">
+      <tr><th>ID</th><th>Nome</th><th>Unidade</th><th>Preço unitário</th></tr>
+      <tr th:each="produto: ${produtos}">
+        <td class="mono" th:text="${produto.id}">ID</td>
+        <td th:text="${produto.nome}">Nome</td>
+        <td th:text="${produto.unidadeMedida}">Unidade</td>
+        <td th:text="${#numbers.formatCurrency(produto.precoUnitario)}">Preço</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/produtos">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

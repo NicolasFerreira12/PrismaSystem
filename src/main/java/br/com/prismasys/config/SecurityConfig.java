@@ -60,7 +60,7 @@ public class SecurityConfig {
                         // módulos futuros, já mapeados por perfil conforme o UC
                         .requestMatchers("/estoque/**").hasRole("ESTOQUISTA")
                         .requestMatchers("/producao/**").hasRole("PRODUCAO")
-                        .requestMatchers("/pedidos/**", "/vendas/**", "/clientes/**", "/fornecedores/**", "/transportadoras/**", "/materias-primas/**").hasRole("VENDEDOR")
+                        .requestMatchers("/pedidos/**", "/vendas/**", "/clientes/**", "/fornecedores/**", "/transportadoras/**", "/materias-primas/**", "/produtos/**").hasRole("VENDEDOR")
                         .requestMatchers("/financeiro/**", "/relatorios/**").hasRole("FINANCEIRO")
                         .anyRequest().authenticated()
                 )
