@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('pedidos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Pedido <span class="mono" th:text="'#' + ${pedido.id}"></span></h1></div>
+    <div class="card" style="margin-bottom:20px;">
+      <p><strong>Cliente:</strong> <span th:text="${pedido.cliente.nome}"></span></p>
+      <p><strong>Transportadora:</strong> <span th:text="${pedido.transportadora.nome}"></span></p>
+      <p><strong>Data:</strong> <span th:text="${#dates.format(pedido.dataPedido,'dd/MM/yyyy HH:mm')}"></span></p>
+      <p><strong>Status:</strong> <span th:text="${pedido.status}"></span></p>
+    </div>
+    <table class="data-table">
+      <tr><th>Produto</th><th>Quantidade</th><th>Preço unit.</th><th>Subtotal</th></tr>
+      <tr th:each="item : ${pedido.itens}">
+        <td th:text="${item.produto.nome}">Produto</td>
+        <td th:text="${item.quantidade}">Qtd</td>
+        <td th:text="${#numbers.formatCurrency(item.precoUnitario)}">Preço</td>
+        <td th:text="${#numbers.formatCurrency(item.subtotal)}">Subtotal</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px; font-weight:600; font-size:17px;">Total: <span th:text="${#numbers.formatCurrency(pedido.valorTotal)}"></span></p>
+    <p style="margin-top:16px;"><a href="/pedidos/list">← Voltar para a lista</a></p>
+  </main>
+</div>
+</body>
+</html>

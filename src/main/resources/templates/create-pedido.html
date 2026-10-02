@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Novo Pedido - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+  <style>
+    #itens-table input[type="number"] { width: 90px; }
+    #itens-table select { width: 100%; }
+    #itens-table td { vertical-align: middle; }
+    .subtotal-cell { font-family: var(--font-mono); white-space: nowrap; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('pedidos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Novo pedido</h1></div>
+
+    <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+      <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+    </div>
+
+    <form id="pedido-form" th:action="@{/pedidos}" method="post">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="form-field">
+          <label>Cliente</label>
+          <select name="clienteId" required>
+            <option value="">Selecione...</option>
+            <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Transportadora</label>
+          <select name="transportadoraId" required>
+            <option value="">Selecione...</option>
+            <option th:each="transportadora : ${transportadoras}" th:value="${transportadora.id}" th:text="${transportadora.nome}"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:12px;">Itens do pedido</h3>
+        <table class="data-table" id="itens-table">
+          <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Preço unit.</th>
+            <th>Subtotal</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="itens-tbody">
+          <!-- linhas adicionadas via JS -->
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-outline" style="margin-top:12px;" onclick="adicionarItem()">+ Adicionar item</button>
+        <p style="margin-top:16px; font-weight:600;">Total: <span id="total-pedido" class="subtotal-cell">R$ 0,00</span></p>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top:20px;">Salvar pedido</button>
+    </form>
+    <p style="margin-top:16px;"><a href="/pedidos">← Voltar</a></p>
+  </main>
+</div>
+
+<script th:inline="javascript">
+  const produtos = /*[[${produtos}]]*/ [];
+  let itemIndex = 0;
+
+  function formatarMoeda(valor) {
+      return 'R$ ' + valor.toFixed(2).replace('.', ',');
+  }
+
+  function adicionarItem() {
+      const tbody = document.getElementById('itens-tbody');
+      const tr = document.createElement('tr');
+      tr.dataset.index = itemIndex;
+
+      const tdProduto = document.createElement('td');
+      const select = document.createElement('select');
+      select.name = 'itens[' + itemIndex + '].produtoId';
+      select.innerHTML = '<option value="">Selecione...</option>' +
+          produtos.map(p => '<option value="' + p.id + '" data-preco="' + p.precoUnitario + '">' + p.nome + ' (' + p.unidadeMedida + ')</option>').join('');
+      select.addEventListener('change', () => atualizarLinha(tr));
+      tdProduto.appendChild(select);
+
+      const tdQtd = document.createElement('td');
+      const inputQtd = document.createElement('input');
+      inputQtd.type = 'number';
+      inputQtd.min = '1';
+      inputQtd.value = '1';
+      inputQtd.name = 'itens[' + itemIndex + '].quantidade';
+      inputQtd.addEventListener('input', () => atualizarLinha(tr));
+      tdQtd.appendChild(inputQtd);
+
+      const tdPreco = document.createElement('td');
+      tdPreco.className = 'subtotal-cell';
+      tdPreco.textContent = 'R$ 0,00';
+
+      const tdSubtotal = document.createElement('td');
+      tdSubtotal.className = 'subtotal-cell';
+      tdSubtotal.textContent = 'R$ 0,00';
+
+      const tdRemover = document.createElement('td');
+      const btnRemover = document.createElement('button');
+      btnRemover.type = 'button';
+      btnRemover.textContent = 'Remover';
+      btnRemover.className = 'btn btn-outline';
+      btnRemover.addEventListener('click', () => {
+          tr.remove();
+          renumerarLinhas();
+          atualizarTotal();
+      });
+      tdRemover.appendChild(btnRemover);
+
+      tr.appendChild(tdProduto);
+      tr.appendChild(tdQtd);
+      tr.appendChild(tdPreco);
+      tr.appendChild(tdSubtotal);
+      tr.appendChild(tdRemover);
+      tbody.appendChild(tr);
+
+      itemIndex++;
+  }
+
+  function atualizarLinha(tr) {
+      const select = tr.querySelector('select');
+      const inputQtd = tr.querySelector('input[type="number"]');
+      const tdPreco = tr.children[2];
+      const tdSubtotal = tr.children[3];
+
+      const opcao = select.options[select.selectedIndex];
+      const preco = opcao && opcao.dataset.preco ? parseFloat(opcao.dataset.preco) : 0;
+      const qtd = parseInt(inputQtd.value, 10) || 0;
+
+      tdPreco.textContent = formatarMoeda(preco);
+      tdSubtotal.textContent = formatarMoeda(preco * qtd);
+
+      atualizarTotal();
+  }
+
+  function renumerarLinhas() {
+      const linhas = document.querySelectorAll('#itens-tbody tr');
+      linhas.forEach((tr, i) => {
+          tr.querySelector('select').name = 'itens[' + i + '].produtoId';
+          tr.querySelector('input[type="number"]').name = 'itens[' + i + '].quantidade';
+      });
+      itemIndex = linhas.length;
+  }
+
+  function atualizarTotal() {
+      let total = 0;
+      document.querySelectorAll('#itens-tbody tr').forEach(tr => {
+          const select = tr.querySelector('select');
+          const inputQtd = tr.querySelector('input[type="number"]');
+          const opcao = select.options[select.selectedIndex];
+          const preco = opcao && opcao.dataset.preco ? parseFloat(opcao.dataset.preco) : 0;
+          const qtd = parseInt(inputQtd.value, 10) || 0;
+          total += preco * qtd;
+      });
+      document.getElementById('total-pedido').textContent = formatarMoeda(total);
+  }
+
+  adicionarItem();
+</script>
+</body>
+</html>
