@@ -15,6 +15,11 @@
       <p><strong>Transportadora:</strong> <span th:text="${pedido.transportadora.nome}"></span></p>
       <p><strong>Data:</strong> <span th:text="${#dates.format(pedido.dataPedido,'dd/MM/yyyy HH:mm')}"></span></p>
       <p><strong>Status:</strong> <span th:text="${pedido.status}"></span></p>
+      <p th:if="${pagamento}"><strong>Pagamento:</strong>
+        <span th:text="${pagamento.formaPagamento}"></span> —
+        <span th:text="${pagamento.status}"></span>
+      </p>
+      <a th:if="${pedido.status == 'ABERTO'}" class="btn btn-accent" th:href="@{'/pedidos/' + ${pedido.id} + '/pagamento'}" style="display:inline-block; margin-top:12px;">Fazer pagamento</a>
     </div>
     <table class="data-table">
       <tr><th>Produto</th><th>Quantidade</th><th>Preço unit.</th><th>Subtotal</th></tr>

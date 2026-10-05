@@ -18,7 +18,17 @@ public class Cliente {
     private String email;
     private String endereco;
 
+    private Double limiteCredito;
+
     public Cliente() {
+    }
+
+    public Double getLimiteCredito() {
+        return limiteCredito;
+    }
+
+    public void setLimiteCredito(Double limiteCredito) {
+        this.limiteCredito = limiteCredito;
     }
 
     public Long getId() {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamento - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('pedidos')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Pagamento do pedido <span class="mono" th:text="'#' + ${pedido.id}"></span></h1></div>
+    <div class="card" style="max-width:420px;">
+      <p><strong>Cliente:</strong> <span th:text="${pedido.cliente.nome}"></span></p>
+      <p style="margin-bottom:20px;"><strong>Valor total:</strong> <span th:text="${#numbers.formatCurrency(pedido.valorTotal)}"></span></p>
+
+      <form th:action="@{'/pedidos/' + ${pedido.id} + '/pagamento'}" method="post">
+        <div class="form-field">
+          <label>Forma de pagamento</label>
+          <select name="forma" required style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+            <option value="PIX">Pix</option>
+            <option value="CREDITO">Crédito</option>
+            <option value="BOLETO">Boleto</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Confirmar pagamento</button>
+      </form>
+    </div>
+    <p style="margin-top:16px;"><a th:href="@{'/pedidos/' + ${pedido.id}}">← Voltar ao pedido</a></p>
+  </main>
+</div>
+</body>
+</html>
