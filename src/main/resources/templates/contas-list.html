@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Contas - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Contas a Pagar/Receber</h1></div>
+    <table class="data-table">
+      <tr>
+        <th>ID</th><th>Descrição</th><th>Tipo</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th>
+      </tr>
+      <tr th:each="conta: ${contas}">
+        <td class="mono" th:text="${conta.id}">ID</td>
+        <td th:text="${conta.descricao}">Descrição</td>
+        <td th:text="${conta.tipo}">Tipo</td>
+        <td th:text="${#numbers.formatCurrency(conta.valor)}">Valor</td>
+        <td th:text="${#dates.format(conta.dataVencimento,'dd/MM/yyyy')}">Vencimento</td>
+        <td th:text="${conta.status}">Status</td>
+        <td>
+          <a th:if="${conta.status.name() == 'PENDENTE'}" th:href="@{'/financeiro/contas/baixa?id=' + ${conta.id}}">Dar baixa</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/financeiro/contas">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
