@@ -1,6 +1,7 @@
 package br.com.prismasys.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -19,12 +20,14 @@ public class ContaPagarReceber {
     private Double valor;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataVencimento;
 
     @Temporal(TemporalType.DATE)
     private Date dataPagamento;
 
     @Enumerated(EnumType.STRING)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private StatusConta status;
 
     public ContaPagarReceber() {
