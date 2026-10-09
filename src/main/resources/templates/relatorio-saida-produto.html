@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Saída de Produto - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Saída de Produto</h1></div>
+
+    <form method="get" style="display:flex; gap:12px; align-items:flex-end; margin-bottom:20px;">
+      <div class="form-field" style="margin-bottom:0;">
+        <label>Mês (Relatório Mensal)</label>
+        <input type="month" name="mes" th:value="${mes}"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <a class="btn btn-outline" th:href="@{/financeiro/relatorios/saida-produto}">Limpar</a>
+    </form>
+
+    <table class="data-table">
+      <tr>
+        <th>Produto</th><th>Unidade</th><th>Quantidade vendida</th><th>Valor total</th>
+      </tr>
+      <tr th:each="linha : ${linhas}">
+        <td th:text="${linha.produto}">Produto</td>
+        <td th:text="${linha.unidade}">Unidade</td>
+        <td th:text="${linha.quantidade}">Qtd</td>
+        <td th:text="${#numbers.formatCurrency(linha.valorTotal)}">Valor</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px; font-size:13px; color:var(--text-muted);">Considera apenas pedidos com status PAGO.</p>
+    <p style="margin-top:16px;"><a href="/financeiro/relatorios">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

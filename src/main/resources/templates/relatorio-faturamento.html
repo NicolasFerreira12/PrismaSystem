@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico de Faturamento - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Histórico de Faturamento</h1></div>
+
+    <form method="get" style="display:flex; gap:12px; align-items:flex-end; margin-bottom:20px;">
+      <div class="form-field" style="margin-bottom:0;">
+        <label>Mês (Relatório Mensal)</label>
+        <input type="month" name="mes" th:value="${mes}"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <a class="btn btn-outline" th:href="@{/financeiro/relatorios/faturamento}">Limpar</a>
+    </form>
+
+    <table class="data-table">
+      <tr>
+        <th>Pedido</th><th>Cliente</th><th>Forma</th><th>Data</th><th>Valor</th>
+      </tr>
+      <tr th:each="pagamento : ${pagamentos}">
+        <td class="mono" th:text="${pagamento.pedido.id}">Pedido</td>
+        <td th:text="${pagamento.pedido.cliente.nome}">Cliente</td>
+        <td th:text="${pagamento.formaPagamento}">Forma</td>
+        <td th:text="${#dates.format(pagamento.dataPagamento,'dd/MM/yyyy HH:mm')}">Data</td>
+        <td th:text="${#numbers.formatCurrency(pagamento.valor)}">Valor</td>
+      </tr>
+    </table>
+
+    <p style="margin-top:16px; font-weight:600; font-size:17px;">Faturamento total: <span th:text="${#numbers.formatCurrency(total)}">R$ 0,00</span></p>
+    <p style="margin-top:8px;" th:each="entrada : ${porForma}">
+      <span th:text="${entrada.key}">FORMA</span>: <span th:text="${#numbers.formatCurrency(entrada.value)}">R$ 0,00</span>
+    </p>
+    <p style="margin-top:16px;"><a href="/financeiro/relatorios">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

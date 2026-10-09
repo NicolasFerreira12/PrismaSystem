@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatórios - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Relatórios</h1></div>
+    <div class="card" style="display:flex; gap:12px; flex-wrap:wrap;">
+      <a class="btn btn-accent" href="/financeiro/relatorios/vendas">Histórico de Vendas</a>
+      <a class="btn btn-accent" href="/financeiro/relatorios/cliente">Histórico de Cliente</a>
+      <a class="btn btn-accent" href="/financeiro/relatorios/faturamento">Histórico de Faturamento</a>
+      <a class="btn btn-accent" href="/financeiro/relatorios/saida-produto">Saída de Produto</a>
+    </div>
+    <p style="margin-top:16px; font-size:13px; color:var(--text-muted);">Todos os relatórios têm filtro por mês (Relatório Mensal). Sem mês selecionado, mostram todo o período.</p>
+    <p style="margin-top:16px;"><a href="/financeiro">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
