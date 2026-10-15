@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nota Fiscal - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+  <style>
+    .chave { font-family: var(--font-mono); font-size: 15px; word-break: break-all; }
+    @media print {
+        .sidebar, .no-print { display: none !important; }
+        .main { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Nota Fiscal <span class="mono" th:text="'nº ' + ${nota.numero}"></span></h1></div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p><strong>Emitente:</strong> PrismaSys</p>
+      <p><strong>Emissão:</strong> <span th:text="${#dates.format(nota.dataEmissao,'dd/MM/yyyy HH:mm')}"></span></p>
+      <p><strong>Pedido:</strong> <span class="mono" th:text="'#' + ${nota.pedido.id}"></span></p>
+      <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;"/>
+      <p><strong>Destinatário:</strong> <span th:text="${nota.pedido.cliente.nome}"></span></p>
+      <p><strong>CPF/CNPJ:</strong> <span class="mono" th:text="${nota.pedido.cliente.cpfCnpj}"></span></p>
+      <p><strong>Endereço:</strong> <span th:text="${nota.pedido.cliente.endereco}"></span></p>
+      <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;"/>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:6px;">Chave de acesso</p>
+      <p class="chave" th:text="${nota.chaveAcesso}"></p>
+    </div>
+
+    <table class="data-table">
+      <tr><th>Produto</th><th>Quantidade</th><th>Preço unit.</th><th>Subtotal</th></tr>
+      <tr th:each="item : ${nota.pedido.itens}">
+        <td th:text="${item.produto.nome}">Produto</td>
+        <td th:text="${item.quantidade}">Qtd</td>
+        <td th:text="${#numbers.formatCurrency(item.precoUnitario)}">Preço</td>
+        <td th:text="${#numbers.formatCurrency(item.subtotal)}">Subtotal</td>
+      </tr>
+    </table>
+    <p style="margin-top:16px; font-weight:600; font-size:17px;">Valor total: <span th:text="${#numbers.formatCurrency(nota.valorTotal)}"></span></p>
+    <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">Documento simulado, sem validade fiscal.</p>
+
+    <p class="no-print" style="margin-top:16px;">
+      <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>
+    </p>
+    <p class="no-print" style="margin-top:16px;"><a href="/financeiro/notas">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

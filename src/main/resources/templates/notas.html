@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Notas Fiscais - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Notas Fiscais</h1></div>
+
+    <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+      <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Emitir nota fiscal</h3>
+      <p th:if="${#lists.isEmpty(pedidos)}" style="color:var(--text-muted);">Nenhum pedido elegível (pedidos pagos e sem nota fiscal).</p>
+      <form th:unless="${#lists.isEmpty(pedidos)}" th:action="@{/financeiro/notas}" method="post">
+        <div class="form-field">
+          <label>Pedido</label>
+          <select name="pedidoId" required style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+            <option value="">Selecione...</option>
+            <option th:each="p : ${pedidos}" th:value="${p.id}"
+                    th:text="'#' + ${p.id} + ' — ' + ${p.cliente.nome} + ' — ' + ${#numbers.formatCurrency(p.valorTotal)}"></option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Emitir nota fiscal</button>
+      </form>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <th>Nota</th><th>Pedido</th><th>Cliente</th><th>Emissão</th><th>Valor</th><th></th>
+      </tr>
+      <tr th:each="nota : ${notas}">
+        <td class="mono" th:text="${nota.numero}">Nº</td>
+        <td class="mono" th:text="${nota.pedido.id}">Pedido</td>
+        <td th:text="${nota.pedido.cliente.nome}">Cliente</td>
+        <td th:text="${#dates.format(nota.dataEmissao,'dd/MM/yyyy HH:mm')}">Emissão</td>
+        <td th:text="${#numbers.formatCurrency(nota.valorTotal)}">Valor</td>
+        <td><a th:href="@{'/financeiro/notas/' + ${nota.id}}">Abrir</a></td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/financeiro">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>

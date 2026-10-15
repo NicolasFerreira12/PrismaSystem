@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Boletos - PrismaSys</title>
+  <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+  <div th:replace="~{fragments/sidebar :: sidebar('financeiro')}"></div>
+  <main class="main">
+    <div class="page-header"><h1>Boletos</h1></div>
+
+    <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+      <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Gerar boleto</h3>
+      <p th:if="${#lists.isEmpty(pedidos)}" style="color:var(--text-muted);">Nenhum pedido elegível (pedidos ainda não pagos e sem boleto).</p>
+      <form th:unless="${#lists.isEmpty(pedidos)}" th:action="@{/financeiro/boletos}" method="post">
+        <div class="form-field">
+          <label>Pedido</label>
+          <select name="pedidoId" required style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+            <option value="">Selecione...</option>
+            <option th:each="p : ${pedidos}" th:value="${p.id}"
+                    th:text="'#' + ${p.id} + ' — ' + ${p.cliente.nome} + ' — ' + ${#numbers.formatCurrency(p.valorTotal)}"></option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Data de vencimento</label>
+          <input type="date" name="vencimento" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Gerar boleto</button>
+      </form>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <th>ID</th><th>Pedido</th><th>Cliente</th><th>Valor</th><th>Vencimento</th><th></th>
+      </tr>
+      <tr th:each="boleto : ${boletos}">
+        <td class="mono" th:text="${boleto.id}">ID</td>
+        <td class="mono" th:text="${boleto.pedido.id}">Pedido</td>
+        <td th:text="${boleto.pedido.cliente.nome}">Cliente</td>
+        <td th:text="${#numbers.formatCurrency(boleto.valor)}">Valor</td>
+        <td th:text="${#dates.format(boleto.dataVencimento,'dd/MM/yyyy')}">Vencimento</td>
+        <td><a th:href="@{'/financeiro/boletos/' + ${boleto.id}}">Abrir</a></td>
+      </tr>
+    </table>
+    <p style="margin-top:16px;"><a href="/financeiro">← Voltar</a></p>
+  </main>
+</div>
+</body>
+</html>
