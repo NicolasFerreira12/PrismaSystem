@@ -1,5 +1,6 @@
 package br.com.prismasys.service;
 
+import br.com.prismasys.model.FormaPagamento;
 import br.com.prismasys.model.Boleto;
 import br.com.prismasys.model.Pedido;
 import br.com.prismasys.repository.BoletoRepository;
@@ -92,5 +93,19 @@ public class BoletoService {
                 + digitos.substring(21, 26) + "." + digitos.substring(26, 32) + " "
                 + digitos.substring(32, 33) + " "
                 + digitos.substring(33, 47);
+    }
+
+    @Autowired
+    private PagamentoService pagamentoService;
+
+    @Transactional
+    public void confirmarPagamento(Long boletoId) {
+        Boleto boleto = repository.findById(boletoId)
+                .orElseThrow(() -> new IllegalArgumentException("Boleto não encontrado."));
+        Pedido pedido = boleto.getPedido();
+        if ("PAGO".equals(pedido.getStatus())) {
+            throw new IllegalArgumentException("Este pedido já está pago.");
+        }
+        pagamentoService.processar(pedido.getId(), FormaPagamento.BOLETO);
     }
 }

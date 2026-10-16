@@ -18,6 +18,10 @@
   <main class="main">
     <div class="page-header"><h1>Boleto <span class="mono" th:text="'#' + ${boleto.id}"></span></h1></div>
 
+    <div class="card no-print" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+      <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+    </div>
+
     <div class="card" style="max-width:640px;">
       <p><strong>Beneficiário:</strong> PrismaSys</p>
       <p><strong>Pagador:</strong> <span th:text="${boleto.pedido.cliente.nome}"></span>
@@ -26,11 +30,19 @@
       <p><strong>Emissão:</strong> <span th:text="${#dates.format(boleto.dataEmissao,'dd/MM/yyyy')}"></span></p>
       <p><strong>Vencimento:</strong> <span th:text="${#dates.format(boleto.dataVencimento,'dd/MM/yyyy')}"></span></p>
       <p style="font-size:18px;"><strong>Valor:</strong> <span th:text="${#numbers.formatCurrency(boleto.valor)}"></span></p>
+      <p><strong>Situação:</strong>
+        <span th:text="${boleto.pedido.status == 'PAGO'} ? 'Pago' : 'Aguardando pagamento'"></span></p>
       <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;"/>
       <p style="font-size:13px; color:var(--text-muted); margin-bottom:6px;">Linha digitável</p>
       <p class="linha-digitavel" th:text="${boleto.linhaDigitavel}"></p>
       <p style="margin-top:16px; font-size:12px; color:var(--text-muted);">Boleto simulado, sem validade bancária.</p>
     </div>
+
+    <form class="no-print" th:if="${boleto.pedido.status != 'PAGO'}"
+          th:action="@{'/financeiro/boletos/' + ${boleto.id} + '/confirmar-pagamento'}" method="post" style="margin-top:16px;">
+      <button type="submit" class="btn btn-accent"
+              onclick="return confirm('Confirmar o recebimento deste boleto?')">Confirmar pagamento</button>
+    </form>
 
     <p class="no-print" style="margin-top:16px;">
       <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>

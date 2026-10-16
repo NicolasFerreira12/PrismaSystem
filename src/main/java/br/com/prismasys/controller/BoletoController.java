@@ -49,6 +49,17 @@ public class BoletoController {
         return "redirect:/financeiro/boletos";
     }
 
+    @PostMapping("/{id}/confirmar-pagamento")
+    public String confirmarPagamento(@PathVariable("id") Long id, Model model) {
+        try {
+            service.confirmarPagamento(id);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("erro", e.getMessage());
+            return detalhe(id, model);
+        }
+        return "redirect:/financeiro/boletos/" + id;
+    }
+
     private void carregar(Model model) {
         model.addAttribute("boletos", service.listar());
         model.addAttribute("pedidos", service.pedidosElegiveis());

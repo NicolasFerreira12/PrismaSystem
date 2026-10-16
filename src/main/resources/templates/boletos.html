@@ -37,7 +37,7 @@
 
     <table class="data-table">
       <tr>
-        <th>ID</th><th>Pedido</th><th>Cliente</th><th>Valor</th><th>Vencimento</th><th></th>
+        <th>ID</th><th>Pedido</th><th>Cliente</th><th>Valor</th><th>Vencimento</th><th>Situação</th>
       </tr>
       <tr th:each="boleto : ${boletos}">
         <td class="mono" th:text="${boleto.id}">ID</td>
@@ -45,6 +45,7 @@
         <td th:text="${boleto.pedido.cliente.nome}">Cliente</td>
         <td th:text="${#numbers.formatCurrency(boleto.valor)}">Valor</td>
         <td th:text="${#dates.format(boleto.dataVencimento,'dd/MM/yyyy')}">Vencimento</td>
+        <td th:text="${boleto.pedido.status == 'PAGO'} ? 'Pago' : 'Aguardando'">Situação</td>
         <td><a th:href="@{'/financeiro/boletos/' + ${boleto.id}}">Abrir</a></td>
       </tr>
     </table>

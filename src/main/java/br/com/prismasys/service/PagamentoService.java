@@ -26,6 +26,12 @@ public class PagamentoService {
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
 
+        // reaproveita o registro de uma tentativa recusada; pedido já pago não pode pagar de novo
+        Pagamento pagamento = pagamentoRepository.findByPedidoId(pedidoId).orElseGet(Pagamento::new);
+        if (pagamento.getStatus() == StatusPagamento.APROVADO) {
+            throw new IllegalArgumentException("Este pedido já está pago.");
+        }
+
         StatusPagamento status = StatusPagamento.APROVADO;
 
         if (forma == FormaPagamento.CREDITO) {
@@ -35,7 +41,6 @@ public class PagamentoService {
             }
         }
 
-        Pagamento pagamento = new Pagamento();
         pagamento.setPedido(pedido);
         pagamento.setFormaPagamento(forma);
         pagamento.setValor(pedido.getValorTotal());

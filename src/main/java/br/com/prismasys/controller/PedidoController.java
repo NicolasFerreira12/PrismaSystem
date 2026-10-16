@@ -88,9 +88,16 @@ public class PedidoController {
     }
 
     @PostMapping("/{id}/pagamento")
-    public String processarPagamento(@PathVariable("id") Long id, @RequestParam("forma") FormaPagamento forma, Model model) {
-        Pagamento pagamento = pagamentoService.processar(id, forma);
-        model.addAttribute("pagamento", pagamento);
+    public String processarPagamento(@PathVariable("id") Long id, @RequestParam("forma") FormaPagamento forma) {
+        if (forma == FormaPagamento.BOLETO) {
+            // boleto é gerado e confirmado pelo Financeiro, não é mais pago na tela do Vendedor
+            return "redirect:/pedidos/" + id + "/pagamento";
+        }
+        try {
+            pagamentoService.processar(id, forma);
+        } catch (IllegalArgumentException e) {
+            // pedido já pago (ex.: clique duplo): só volta para o detalhe
+        }
         return "redirect:/pedidos/" + id;
     }
 
