@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import br.com.prismasys.service.EstoqueInsuficienteException;
 
 import java.util.Optional;
 
@@ -88,13 +89,18 @@ public class PedidoController {
     }
 
     @PostMapping("/{id}/pagamento")
-    public String processarPagamento(@PathVariable("id") Long id, @RequestParam("forma") FormaPagamento forma) {
+    public String processarPagamento(@PathVariable("id") Long id,
+                                     @RequestParam("forma") FormaPagamento forma,
+                                     Model model) {
         if (forma == FormaPagamento.BOLETO) {
             // boleto é gerado e confirmado pelo Financeiro, não é mais pago na tela do Vendedor
             return "redirect:/pedidos/" + id + "/pagamento";
         }
         try {
             pagamentoService.processar(id, forma);
+        } catch (EstoqueInsuficienteException e) {
+            model.addAttribute("erro", e.getMessage());
+            return telaPagamento(id, model);
         } catch (IllegalArgumentException e) {
             // pedido já pago (ex.: clique duplo): só volta para o detalhe
         }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimentação de Estoque - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('estoque')}"></div>
+    <main class="main">
+        <div class="page-header"><h1 th:text="${titulo}">Movimentação</h1></div>
+
+        <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px; max-width:480px;" th:if="${erro}">
+            <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+        </div>
+
+        <div class="card" style="max-width:480px;">
+            <form th:action="@{'/estoque/' + ${acao}}" method="post">
+                <div class="form-field">
+                    <label>Produto</label>
+                    <select name="produtoId" required style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+                        <option value="">Selecione...</option>
+                        <option th:each="p : ${produtos}" th:value="${p.id}"
+                                th:selected="${produtoIdSel != null and produtoIdSel == p.id}"
+                                th:text="${p.nome + ' (saldo: ' + #numbers.formatDecimal(p.estoqueAtual, 1, 'POINT', 3, 'COMMA') + ' ' + p.unidadeMedida + ')'}"></option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label th:text="${rotulo}">Quantidade</label>
+                    <input type="text" name="quantidade" required th:value="${quantidadeSel}"/>
+                </div>
+                <div class="form-field">
+                    <label th:text="${motivoObrigatorio} ? 'Motivo (obrigatório)' : 'Motivo (opcional)'">Motivo</label>
+                    <input type="text" name="motivo" th:value="${motivoSel}" th:required="${motivoObrigatorio}"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Confirmar</button>
+            </form>
+        </div>
+        <p style="margin-top:16px;"><a href="/estoque">← Voltar</a></p>
+    </main>
+</div>
+</body>
+</html>

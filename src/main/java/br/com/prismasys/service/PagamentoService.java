@@ -5,6 +5,9 @@ import br.com.prismasys.repository.PagamentoRepository;
 import br.com.prismasys.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -18,10 +21,14 @@ public class PagamentoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private EstoqueService estoqueService;
+
     public Optional<Pagamento> buscarPorPedido(Long pedidoId) {
         return pagamentoRepository.findByPedidoId(pedidoId);
     }
 
+    @Transactional
     public Pagamento processar(Long pedidoId, FormaPagamento forma) {
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
@@ -51,6 +58,15 @@ public class PagamentoService {
         pedido.setStatus(status == StatusPagamento.APROVADO ? "PAGO" : "PAGAMENTO_RECUSADO");
         pedidoRepository.save(pedido);
 
+        if (status == StatusPagamento.APROVADO) {
+            estoqueService.baixarPedido(pedido, usuarioLogado());
+        }
+
         return pagamento;
+    }
+
+    private String usuarioLogado() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null ? auth.getName() : "sistema";
     }
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Estoque - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('estoque')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Histórico de movimentações</h1></div>
+
+        <div class="card" th:if="${param.ok}" style="margin-bottom:16px;">
+            <strong>Movimentação registrada com sucesso.</strong>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+            <form th:action="@{/estoque/historico}" method="get" style="display:flex; gap:12px; align-items:center;">
+                <select name="produtoId" required style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+                    <option value="">Selecione o produto...</option>
+                    <option th:each="p : ${produtos}" th:value="${p.id}" th:text="${p.nome}"
+                            th:selected="${produtoId != null and produtoId == p.id}"></option>
+                </select>
+                <button type="submit" class="btn btn-primary">Ver histórico</button>
+            </form>
+        </div>
+
+        <table class="data-table" th:if="${movimentacoes != null}">
+            <tr>
+                <th>Data</th><th>Tipo</th><th>Quantidade</th><th>Saldo anterior</th>
+                <th>Saldo após</th><th>Motivo</th><th>Usuário</th><th>Pedido</th>
+            </tr>
+            <tr th:each="m : ${movimentacoes}">
+                <td th:text="${#temporals.format(m.data, 'dd/MM/yyyy HH:mm')}">data</td>
+                <td th:text="${m.tipo.descricao}">tipo</td>
+                <td class="mono" th:text="${#numbers.formatDecimal(m.quantidade, 1, 'POINT', 3, 'COMMA')}">0</td>
+                <td class="mono" th:text="${#numbers.formatDecimal(m.saldoAnterior, 1, 'POINT', 3, 'COMMA')}">0</td>
+                <td class="mono" th:text="${#numbers.formatDecimal(m.saldoApos, 1, 'POINT', 3, 'COMMA')}">0</td>
+                <td th:text="${m.motivo}">motivo</td>
+                <td th:text="${m.usuario}">usuário</td>
+                <td th:text="${m.pedido != null} ? ('#' + ${m.pedido.id}) : '-'">-</td>
+            </tr>
+            <tr th:if="${movimentacoes.isEmpty()}"><td colspan="8">Nenhuma movimentação para este produto.</td></tr>
+        </table>
+        <p style="margin-top:16px;"><a href="/estoque">← Voltar</a></p>
+    </main>
+</div>
+</body>
+</html>

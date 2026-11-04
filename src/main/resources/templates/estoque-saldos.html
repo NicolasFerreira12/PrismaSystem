@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saldos de Estoque - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('estoque')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Saldos de estoque</h1></div>
+
+        <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+            <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+        </div>
+
+        <table class="data-table">
+            <tr><th>ID</th><th>Produto</th><th>Unidade</th><th>Saldo</th><th>Estoque mínimo</th><th>Situação</th><th></th></tr>
+            <tr th:each="p : ${produtos}">
+                <td class="mono" th:text="${p.id}">ID</td>
+                <td th:text="${p.nome}">Nome</td>
+                <td th:text="${p.unidadeMedida}">Un</td>
+                <td class="mono" th:text="${#numbers.formatDecimal(p.estoqueAtual, 1, 'POINT', 3, 'COMMA')}">0</td>
+                <td>
+                    <form th:action="@{'/estoque/' + ${p.id} + '/minimo'}" method="post" style="display:flex; gap:6px;">
+                        <input type="text" name="minimo" style="width:100px;"
+                               th:value="${#numbers.formatDecimal(p.estoqueMinimo, 1, 'POINT', 3, 'COMMA')}"/>
+                        <button type="submit" class="btn btn-outline">Salvar</button>
+                    </form>
+                </td>
+                <td>
+                    <span th:if="${p.abaixoDoMinimo}" style="color:var(--danger); font-weight:600;">Repor</span>
+                    <span th:unless="${p.abaixoDoMinimo}">OK</span>
+                </td>
+                <td><a th:href="@{/estoque/historico(produtoId=${p.id})}">Histórico</a></td>
+            </tr>
+        </table>
+        <p style="margin-top:16px;"><a href="/estoque">← Voltar</a></p>
+    </main>
+</div>
+</body>
+</html>
