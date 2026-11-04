@@ -66,8 +66,13 @@ public class ProdutoController {
     }
 
     @GetMapping("/delete")
-    public String excluir(@RequestParam("id") Long id) {
-        service.excluir(id);
+    public String excluir(@RequestParam("id") Long id, Model model) {
+        try {
+            service.excluir(id);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            model.addAttribute("erro", e.getMessage());
+            return "excluir-produtos";
+        }
         return "redirect:/produtos/list";
     }
 }

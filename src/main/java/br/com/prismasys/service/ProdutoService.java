@@ -5,6 +5,7 @@ import br.com.prismasys.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,14 @@ public class ProdutoService {
     }
 
     public void excluir(Long id) {
-        repository.deleteById(id);
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("Produto não encontrado: ID " + id + ".");
+        }
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException(
+                    "Não é possível excluir este produto: ele já está vinculado a pedidos ou a movimentações de estoque.");
+        }
     }
 }
