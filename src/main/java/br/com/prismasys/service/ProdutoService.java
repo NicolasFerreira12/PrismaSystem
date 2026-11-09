@@ -44,7 +44,7 @@ public class ProdutoService {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException(
-                    "Não é possível excluir este produto: ele já está vinculado a pedidos ou a movimentações de estoque.");
+                    "Não é possível excluir este produto: ele já está vinculado a pedidos, ordens de produção ou movimentações de estoque.");
         }
     }
 }

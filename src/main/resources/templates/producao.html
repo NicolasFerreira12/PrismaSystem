@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Produção - PrismaSys</title>
+    <link rel="stylesheet" th:href="@{/css/prismasys.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('producao')}"></div>
+    <main class="main">
+        <div class="page-header"><h1>Ordens de produção</h1></div>
+
+        <div class="card" style="margin-bottom:16px;" th:if="${ok}">
+            <strong th:text="${ok}"></strong>
+        </div>
+        <div class="card" style="border-color: var(--danger); background:#FBEDE8; margin-bottom:16px;" th:if="${erro}">
+            <span th:text="${erro}" style="color:var(--danger); font-weight:600;"></span>
+        </div>
+
+        <div class="card" style="display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <form th:action="@{/producao}" method="get" style="display:flex; gap:8px; align-items:center;">
+                <select name="status" style="padding:9px 12px; border:1px solid var(--border); border-radius:4px; font-family:var(--font-body); font-size:14px;">
+                    <option value="">Todas as situações</option>
+                    <option th:each="s : ${statusOpcoes}" th:value="${s.name()}" th:text="${s.descricao}"
+                            th:selected="${status == s}"></option>
+                </select>
+                <button type="submit" class="btn btn-outline">Filtrar</button>
+            </form>
+            <a class="btn btn-accent" href="/producao/nova">+ Nova ordem</a>
+        </div>
+
+        <table class="data-table">
+            <tr>
+                <th>Nº</th><th>Produto</th><th>Planejada</th><th>Produzida</th>
+                <th>Situação</th><th>Prevista</th><th>Criada em</th><th>Ações</th>
+            </tr>
+            <tr th:each="o : ${ordens}">
+                <td class="mono" th:text="${o.id}">1</td>
+                <td th:text="${o.produto.nome}">Produto</td>
+                <td class="mono" th:text="${#numbers.formatDecimal(o.quantidadePlanejada, 1, 'POINT', 3, 'COMMA') + ' ' + o.produto.unidadeMedida}">0</td>
+                <td class="mono" th:text="${o.quantidadeProduzida != null} ? ${#numbers.formatDecimal(o.quantidadeProduzida, 1, 'POINT', 3, 'COMMA') + ' ' + o.produto.unidadeMedida} : '-'">-</td>
+                <td th:text="${o.status.descricao}">Situação</td>
+                <td th:text="${o.dataPrevista != null} ? ${#temporals.format(o.dataPrevista, 'dd/MM/yyyy')} : '-'">-</td>
+                <td th:text="${#temporals.format(o.dataCriacao, 'dd/MM/yyyy HH:mm')}">data</td>
+                <td>
+                    <form th:if="${o.status.name() == 'PLANEJADA'}" th:action="@{'/producao/' + ${o.id} + '/iniciar'}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-primary">Iniciar</button>
+                    </form>
+                    <a th:if="${o.status.name() == 'EM_PRODUCAO'}" class="btn btn-primary" th:href="@{'/producao/' + ${o.id} + '/concluir'}">Concluir</a>
+                    <form th:if="${o.status.name() == 'PLANEJADA' or o.status.name() == 'EM_PRODUCAO'}"
+                          th:action="@{'/producao/' + ${o.id} + '/cancelar'}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Cancelar esta ordem de produção?');">
+                        <button type="submit" class="btn btn-outline">Cancelar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${ordens.isEmpty()}"><td colspan="8">Nenhuma ordem de produção encontrada.</td></tr>
+        </table>
+    </main>
+</div>
+</body>
+</html>
